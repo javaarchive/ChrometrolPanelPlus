@@ -72,19 +72,31 @@ const TabControls = ({
             });
           }
       }
+
+      function changeVolume(ev: any){
+        let decimalVolume = ev.target.value/100;
+        chrome.tabs.sendMessage(tab.id!,{
+          type: "setVolume",
+          uid: mediaElData.uid,
+          volume: decimalVolume
+        });
+      }
+
       return <div key={mediaElData.uid}>
         <progress value={mediaElData.currentTime} max={mediaElData.duration}> Progress {formatSeconds(mediaElData.currentTime)} </progress> <br />
-        <div>{mediaElData.currentTime}/{mediaElData.duration}</div>
+        <div title={mediaElData.uid}>{mediaElData.currentTime}/{mediaElData.duration}</div>
         <div style={{width: "2rem",height:"auto", display: "inline-block" }} onClick={sendToggle}>{mediaElData.paused ? <PlayIcon />:<PauseIcon />} </div>
         <div style={{width: "2rem",height:"auto", display: "inline-block"}} onClick={sendSkip}><FastForwardIcon/></div>
         <br />
-        <div style={{display: "inline-block"}} onClick={buildMediaRelativeSeekCallback(-30)}>-30</div>
-        <div style={{display: "inline-block"}} onClick={buildMediaRelativeSeekCallback(-30)}>-15</div>
-        <div style={{display: "inline-block"}} onClick={buildMediaRelativeSeekCallback(-30)}>-5</div>
-        <div style={{display: "inline-block"}}> | </div>
-        <div style={{display: "inline-block"}} onClick={buildMediaRelativeSeekCallback(5)}>+5</div>
-        <div style={{display: "inline-block"}} onClick={buildMediaRelativeSeekCallback(15)}>+15</div>
-        <div style={{display: "inline-block"}} onClick={buildMediaRelativeSeekCallback(30)}>+30</div>
+        <div style={{display: "inline-block"}}  className="seek-button" onClick={buildMediaRelativeSeekCallback(-30)}>-30</div>
+        <div style={{display: "inline-block"}}  className="seek-button" onClick={buildMediaRelativeSeekCallback(-30)}>-15</div>
+        <div style={{display: "inline-block"}}  className="seek-button" onClick={buildMediaRelativeSeekCallback(-30)}>-5</div>
+        <div style={{display: "inline-block"}}  className="seek-button" onClick={buildMediaRelativeSeekCallback(5)}>+5</div>
+        <div style={{display: "inline-block"}}  className="seek-button" onClick={buildMediaRelativeSeekCallback(15)}>+15</div>
+        <div style={{display: "inline-block"}}  className="seek-button" onClick={buildMediaRelativeSeekCallback(30)}>+30</div>
+        <br />
+        <div>Volume:</div>
+        <input type="range" min="0" max="100" onInput={changeVolume} value={mediaElData.volume * 100}></input>
       </div>;
     })}
     </div>

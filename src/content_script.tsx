@@ -46,6 +46,15 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
           loop(false); // Update!
         }
         break;
+    case "setVolume":
+        // @ts-ignore
+        el = getAllMedia().find(el => el["uid"] == msg.uid);
+        if(el){
+          // To the end
+          el.volume = msg.volume || 0;
+          loop(false); // Update!
+        }
+        break;
     default:
       console.log("Unknown Message");
       break;
