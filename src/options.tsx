@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
+import defaultsOptions from "./defaultsOptions";
+
 const Options = () => {
   const [color, setColor] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("Idle");
   const [like, setLike] = useState<boolean>(false);
 
   useEffect(() => {
     // Restores select box and checkbox state using the preferences
     // stored in chrome.storage.
     chrome.storage.sync.get(
-      {
-        favoriteColor: "red",
-        likesColor: true,
-      },
+     defaultsOptions,
       (items) => {
         setColor(items.favoriteColor);
         setLike(items.likesColor);
@@ -41,27 +40,7 @@ const Options = () => {
 
   return (
     <>
-      <div>
-        Favorite color: <select
-          value={color}
-          onChange={(event) => setColor(event.target.value)}
-        >
-          <option value="red">red</option>
-          <option value="green">green</option>
-          <option value="blue">blue</option>
-          <option value="yellow">yellow</option>
-        </select>
-      </div>
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={like}
-            onChange={(event) => setLike(event.target.checked)}
-          />
-          I like colors.
-        </label>
-      </div>
+      <h1>Configure Chrometrol Panel</h1>
       <div>{status}</div>
       <button onClick={saveOptions}>Save</button>
     </>
@@ -69,8 +48,6 @@ const Options = () => {
 };
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Options />
-  </React.StrictMode>,
+  <Options />,
   document.getElementById("root")
 );
